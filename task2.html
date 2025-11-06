@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Product Gallery</title>
+
+  <!-- Embedded CSS styles -->
+  <style>
+    /* Reset box model */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Basic page styling */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    /* Page title */
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* Gallery grid layout */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    /* Individual product card styling */
+    .product-card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    /* Hover effect for product cards */
+    .product-card:hover {
+      transform: scale(1.03);
+    }
+
+    /* Product image styling */
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    /* Container for product details */
+    .product-info {
+      padding: 15px;
+    }
+
+    /* Product name */
+    .product-name {
+      font-size: 1.2em;
+      margin: 0 0 10px;
+    }
+
+    /* Product price */
+    .product-price {
+      color: #28a745;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Product description */
+    .product-description {
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    /* Responsive image height for tablets */
+    @media (max-width: 768px) {
+      .product-image {
+        height: 180px;
+      }
+    }
+
+    /* Responsive image height for phones */
+    @media (max-width: 480px) {
+      .product-image {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page heading -->
+  <h1>Accessory Gallery</h1>
+
+  <!-- Product gallery container -->
+  <div class="gallery">
+
+    <!-- Product card 1 -->
+    <div class="product-card">
+      <img src="https://img1.etsystatic.com/056/0/6856316/il_fullxfull.741859575_g57p.jpg" alt="Leather Wallet" class="product-image" />
+      <div class="product-info">
+        <h2 class="product-name">Leather Wallet</h2>
+        <p class="product-price">$25</p>
+        <p class="product-description">Handcrafted wallet made from genuine leather.</p>
+      </div>
+    </div>
+
+    <!-- Product card 2 -->
+    <div class="product-card">
+      <img src="https://i.pinimg.com/originals/4c/cc/ee/4cccee154fd6a5257d7f4f4a4f314df3.jpg" alt="Silk Scarf" class="product-image" />
+      <div class="product-info">
+        <h2 class="product-name">Silk Scarf</h2>
+        <p class="product-price">$30</p>
+        <p class="product-description">Elegant silk scarf with floral patterns.</p>
+      </div>
+    </div>
+
+    <!-- Product card 3 -->
+    <div class="product-card">
+      <img src="images/sunglasses.jpg" alt="Sunglasses" class="product-image" />
+      <div class="product-info">
+        <h2 class="product-name">Sunglasses</h2>
+        <p class="product-price">$45</p>
+        <p class="product-description">Stylish UV-protected sunglasses.</p>
+      </div>
+    </div>
+
+    <!-- Product card 4 -->
+    <div class="product-card">
+      <img src="images/bracelet.jpg" alt="Beaded Bracelet" class="product-image" />
+      <div class="product-info">
+        <h2 class="product-name">Beaded Bracelet</h2>
+        <p class="product-price">$15</p>
+        <p class="product-description">Colorful beaded bracelet for casual wear.</p>
+      </div>
+    </div>
+
+  </div> <!-- End of gallery -->
+
+</body>
+</html>
