@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./task3.css">
+  <script src="./fs.js" defer></script>
+</head>
+<body>
+  <form class="form-container">
+    <title>Event Registration</title>
+
+    <label for="name">Full Name <span class="star">*</span></label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email <span class="star">*</span></label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="phone">Phone <span class="star">*</span></label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9\-+\s]+">
+
+    <label for="organization">Organization</label>
+    <input type="text" id="organization" name="organization">
+
+    <label for="event-type">Event Type <span class="star">*</span></label>
+    <select id="event-type" name="event-type" required>
+      <option value="" disabled selected>Select…</option>
+      <option value="Workshop">Workshop</option>
+      <option value="Seminar">Seminar</option>
+      <option value="Tech Talk">Tech Talk</option>
+    </select>
+
+    <label>Attendance Mode <span class="star">*</span></label>
+    <div class="radio-group">
+      <label>
+        <input type="radio" name="attendance" value="In-person" required> In-person
+      </label>
+      <label>
+        <input type="radio" name="attendance" value="Online" required> Online
+      </label>
+    </div>
+
+    <label for="event-date">Event Date <span class="star">*</span></label>
+    <input type="date" id="event-date" name="event-date" required>
+
+    <label for="preferred-time">Preferred Time <span class="star">*</span></label>
+    <input type="time" id="preferred-time" name="preferred-time" required>
+
+    <label for="seats">Seats Needed <span class="star">*</span></label>
+    <input type="number" id="seats" name="seats" min="1" required>
+
+    <label for="comments">Comments</label>
+    <textarea id="comments" name="comments" rows="3"></textarea>
+
+    <div class="terms checkbox-group">
+      <input type="checkbox" id="terms" name="terms" required>
+      <label for="terms">I agree to the Terms & Privacy <span class="star">*</span></label>
+    </div>
+
+    <div class="actions">
+      <button type="submit">Register</button>
+      <button type="reset" style="background:#e1e7f0;color:#1f273b;">Reset</button>
+    </div>
+  </form>
+</body>
+</html>
