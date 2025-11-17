@@ -1,33 +1,33 @@
-p1{
-    color: rgb(159, 159, 65);height:100px;
+p{
+    color: rgb(9, 9, 9);height:100px;
+
 }
 
- p2{
-    color: rgb(136, 65, 159);
-}
-
-   p3{
-    color: rgb(159, 123, 65) ;
-}
-p4{
-    color: rgb(65, 159, 74);
-}
-
-.photo-grid{
-    display :grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:20px;
-    max-width: 1000px;
-    margin:auto;
-}
-.photo-grid img{
-    width:100%;
-    height:auto;
-    border-radius:8px;
-}
+ h1{
+    text-align: center;
+    font-size: 50px;    
+    color:rgb(51, 43, 43)
+ }
 
 body{
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #715656;
     padding:20px;
+}
+.photo-grid{
+    display: grid;
+    float:center;
+    grid-template-columns: repeat(4, 1fr);  
+    gap: 40px;
+    width:90% 
+      
+}
+.photo-grid img {
+  width: 100%;
+  border-radius: 10px;
+}
+h1{
+    text-align: center;
+    size:50px;
+    color: brown;
 }

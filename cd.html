@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B.Tech Course Selection Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a2d9d6e0b9.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="glass">
+    <h1>Student Course Selection</h1>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+  </header>
+
+  <section class="hero glass fade-in">
+    <h2>Welcome to the CSE Course Selection Platform</h2>
+    <p>Explore, select, and manage your B.Tech courses efficiently.</p>
+    <div class="btn-group">
+      <button onclick="navigateTo('student.html')"><i class="fas fa-user-graduate"></i> Student Portal</button>
+      <button onclick="navigateTo('admin.html')"><i class="fas fa-user-shield"></i> Admin Panel</button>
+    </div>
+  </section>
+
+  <section class="filter-section glass fade-in">
+    <h2>📚 Available Courses</h2>
+    <label>Filter by Category:</label>
+    <select id="categoryFilter" onchange="filterCourses()">
+      <option value="All">All</option>
+      <option value="CSE Core">Core</option>
+      <option value="CSE Elective">Elective</option>
+    </select>
+    <div id="courseGrid" class="course-grid"></div>
+  </section>
+
+  <!-- Popup Modal -->
+  <div id="courseModal" class="modal hidden">
+    <div class="modal-content glass">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3 id="modalTitle"></h3>
+      <p><strong>Subject:</strong> <span id="modalSubject"></span></p>
+      <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+      <p><strong>Time:</strong> <span id="modalTime"></span></p>
+      <p id="modalDesc"></p>
+    </div>
+  </div>
+
+  <!-- Issue Section -->
+  <section class="issue-section glass fade-in">
+    <h2>🧾 Report a Course Issue</h2>
+    <form id="issueForm">
+      <input type="text" id="issueName" placeholder="Your Name" required>
+      <input type="email" id="issueEmail" placeholder="Your Email" required>
+      <textarea id="issueMessage" placeholder="Describe your issue..." required></textarea>
+      <button type="submit">Submit Issue</button>
+    </form>
+    <p id="issueResponse"></p>
+  </section>
+
+  <footer class="glass">
+    <p>© 2025 B.Tech CSE Course Portal | Designed by Satyam</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

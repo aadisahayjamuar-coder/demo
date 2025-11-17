@@ -1,12 +1,5 @@
-body {
-      background: #f7f9fb;
-      font-family: Arial, sans-serif;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    .form-container {
-      background: #fff;
+.form-container {
+      background: #6b878b;
       max-width: 420px;
       margin: 30px auto;
       padding: 32px 28px 16px;
@@ -14,79 +7,6 @@ body {
       box-shadow: 0 4px 24px #dde3ecc0;
       border: 1px solid #e2e6ea;
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #2e4369;
-      font-size: 1.6rem;
-    }
-    label {
-      display: block;
-      margin: 16px 0 6px 0;
-      font-weight: 500;
-      color: #23304b;
-    }
-    label .star {
-      color: #e55;
-      font-size: 1.1em;
-      margin-left: 2px;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #b6bdd0;
-      border-radius: 5px;
-      font-size: 1rem;
-      background: #fcfcfc;
-      box-sizing: border-box;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: #23304b;
-      background: #f7faff;
-    }
-    .radio-group, .checkbox-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 6px;
-    }
-    .radio-group label,
-    .checkbox-group label {
-      font-weight: 400;
-      color: #23304b;
-      margin-bottom: 0;
-    }
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 26px;
-      justify-content: center;
-    }
-    button {
-      background: #3a5ee8;
-      color: #fff;
-      border: none;
-      padding: 9px 24px;
-      font-size: 1rem;
-      border-radius: 5px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 2px 8px #dde3ec73;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #2545ae;
-    }
-    .terms {
-      margin-top: 16px;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    @media (max-width: 480px) {
-      .form-container {
-        padding: 18px 8px 10px;
-      }
+    body{
+        background-color: #0ba6a6;
     }
