@@ -1,4 +1,12 @@
-.form-container {
+
+    body{
+        background-color: #0ba6a6;
+    }
+    
+    button{
+      background-color: rgb(117, 111, 111);
+    }
+    .form-container {
       background: #6b878b;
       max-width: 420px;
       margin: 30px auto;
@@ -7,15 +15,4 @@
       box-shadow: 0 4px 24px #dde3ecc0;
       border: 1px solid #e2e6ea;
       height: auto;
-    }
-    body{
-        background-color: #0ba6a6;
-    }
-    .form-container h2 {
-      text-align: center;
-      color: #fff;
-      margin-bottom: 24px;
-    }
-    button{
-      background-color: rgb(117, 111, 111);
     }

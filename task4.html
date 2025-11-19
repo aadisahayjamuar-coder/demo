@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Themed Layout with SCSS and Custom Properties</title>
+
+  <!-- Internal CSS (SCSS Concepts Demonstrated) -->
+  <style>
+    /* ----------------------------------------------
+       🌈 SCSS-Like Variables and Mixins (Conceptually)
+       ---------------------------------------------- */
+
+    :root {
+      /* Custom Properties for Light Theme */
+      --bg-color: #ffffff;
+      --text-color: #222222;
+      --accent-color: #0077b6;
+      --card-bg: #f4f4f4;
+      --font-family: 'Segoe UI', Tahoma, sans-serif;
+      --spacing: 16px;
+    }
+
+    [data-theme="dark"] {
+      /* Custom Properties for Dark Theme */
+      --bg-color: #121212;
+      --text-color: #e6e6e6;
+      --accent-color: #90e0ef;
+      --card-bg: #1f1f1f;
+    }
+
+    /* ----------------------------------------------
+       🧩 "Mixin" Simulation (we’ll use reusable rules)
+       ---------------------------------------------- */
+    .card {
+      border-radius: 10px;
+      padding: var(--spacing);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ----------------------------------------------
+       ✨ Base Styles (Nesting-like SCSS Structure)
+       ---------------------------------------------- */
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      background-color: var(--accent-color);
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+      border-bottom: 4px solid rgba(0, 0, 0, 0.1);
+
+      h1 {
+        font-size: 2rem;
+        margin: 0;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing);
+      padding: 30px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+    }
+
+    .card h2 {
+      color: var(--accent-color);
+      margin-top: 0;
+    }
+
+    button.theme-toggle {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+
+    button.theme-toggle:hover {
+      background-color: #023e8a;
+    }
+
+    footer {
+      text-align: center;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+      transition: background 0.3s;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Startup Dashboard</h1>
+    <p>Switch between Light and Dark Themes easily!</p>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>About Our Startup</h2>
+      <p>
+        We are a tech-driven startup focused on innovation, sustainability, 
+        and community impact. Our mission is to simplify technology for everyone.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Our Services</h2>
+      <p>
+        From app development to digital marketing, our services are designed 
+        to help small businesses thrive in a connected world.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Contact Us</h2>
+      <p>
+        Want to collaborate? Get in touch and let’s create something amazing together.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Startup Inc. | All Rights Reserved</p>
+  </footer>
+
+  <!-- Simple Theme Toggle Script -->
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        body.removeAttribute('data-theme');
+      } else {
+        body.setAttribute('data-theme', 'dark');
+      }
+    }
+  </script>
+</body>
+</html>

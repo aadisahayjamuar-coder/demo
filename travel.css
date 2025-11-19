@@ -1,3 +1,4 @@
+
 p {
     text-align: left;
     color: rgb(220, 216, 216);
@@ -32,14 +33,19 @@ label{
     margin-left: 20px;  
     text-align: right;
 }
-.travel-container{
-    border: 2px solid white;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 10px;
-    background-color: rgb(70, 130, 130);
-}
 
+img{
+    height: 200px;
+    width: 300px;   
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+.big-img {
+    width: 1400px;   /* Increase width */
+    height: 600px;  /* Optional: increase height */
+    float: center;
+}
 
 
 
