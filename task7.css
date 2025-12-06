@@ -1,0 +1,409 @@
+
+:root {
+  --bg: #f5f7fb;
+  --bg-elevated: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --danger: #ef4444;
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --transition-fast: 180ms ease-out;
+}
+
+body.dark {
+  --bg: #020617;
+  --bg-elevated: rgba(15, 23, 42, 0.88);
+  --text: #f04848;
+  --muted: #9ca3af;
+  --accent: #60a5fa;
+  --accent-soft: rgba(96, 165, 250, 0.18);
+  --border-subtle: rgba(148, 163, 184, 0.32);
+  --danger: #fb7185;
+  --shadow-soft: 0 20px 55px rgba(0, 0, 0, 0.8);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: radial-gradient(circle at top left, #e0f2fe, #eef2ff 40%, #f5f3ff)
+    fixed;
+  color: var(--text);
+  transition:
+    background 260ms ease,
+    color 160ms ease;
+}
+
+body.dark {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.25), #020617 55%)
+    fixed;
+}
+
+/* ---------- Layout tweaks ---------- */
+
+.container {
+  max-width: 1024px;
+}
+
+/* Page title */
+h2 {
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Top controls ---------- */
+
+#searchInput {
+  max-width: 360px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.9);
+  padding-inline: 1rem 2.75rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  transition:
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    background 200ms ease;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='7' cy='7' r='4.5' stroke='%2394A3B8'/%3E%3Cpath d='m10 10 3.5 3.5' stroke='%2394A3B8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+
+body.dark #searchInput {
+  background: rgba(244, 245, 246, 0.95);
+}
+
+#searchInput:focus-visible {
+  outline: 2px solid transparent;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow-soft);
+}
+
+/* Sort select */
+#sortSelect {
+  min-width: 170px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  background-color: rgba(255, 255, 255, 0.9);
+  transition:
+    border-color var(--transition-fast),
+    background 200ms ease,
+    box-shadow var(--transition-fast);
+}
+
+body.dark #sortSelect {
+  background-color: rgba(250, 250, 252, 0.95);
+}
+
+#sortSelect:focus-visible {
+  outline: 2px solid transparent;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Theme toggle */
+#themeToggle {
+  border-radius: var(--radius-pill);
+  padding-inline: 1.25rem;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  background: var(--text);
+  color: #f9fafb;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 160ms ease-out,
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+body.dark #themeToggle {
+  background: #e5e7eb;
+  color: #020617;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.65);
+}
+
+#themeToggle:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.45);
+}
+
+#themeToggle:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-soft);
+}
+
+/* ---------- Add book card ---------- */
+
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition:
+    transform 160ms ease-out,
+    box-shadow 180ms ease-out,
+    border-color var(--transition-fast),
+    background 220ms ease;
+}
+
+body.dark .card {
+  background: rgba(245, 246, 248, 0.9);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.22);
+}
+
+/* Inputs in add form */
+#titleInput,
+#authorInput,
+#priceInput,
+#ratingInput {
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background-color: rgba(255, 255, 255, 0.9);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background 200ms ease;
+}
+
+body.dark #titleInput,
+body.dark #authorInput,
+body.dark #priceInput,
+body.dark #ratingInput {
+  background-color: rgba(245, 246, 250, 0.95);
+  color: var(--text);
+}
+
+#titleInput:focus-visible,
+#authorInput:focus-visible,
+#priceInput:focus-visible,
+#ratingInput:focus-visible {
+  outline: 2px solid transparent;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Add button */
+#addBtn {
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 14px 35px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 160ms ease-out,
+    background-color 200ms ease;
+}
+
+#addBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 40px rgba(37, 99, 235, 0.45);
+}
+
+#addBtn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.55);
+}
+
+#addBtn:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- Book cards ---------- */
+
+.book-card {
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  background: radial-gradient(
+      circle at top left,
+      rgba(251, 191, 36, 0.12),
+      transparent 55%
+    ),
+    radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.18), transparent
+          55%),
+    var(--bg-elevated);
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition:
+    transform 160ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color var(--transition-fast),
+    background 220ms ease;
+}
+
+.book-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle at top left,
+    rgba(248, 250, 252, 0.18),
+    transparent 60%
+  );
+  transition: opacity 220ms ease-out;
+  pointer-events: none;
+}
+
+.book-card:hover {
+  transform: translateY(-4px) translateZ(0);
+  box-shadow: 0 26px 65px rgba(15, 23, 42, 0.3);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.book-card:hover::before {
+  opacity: 1;
+}
+
+/* Header row (title + price) */
+.book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.book-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.book-author {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+.book-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Price pill */
+.book-price {
+  border-radius: 999px;
+  padding: 0.15rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  background-color: rgba(15, 23, 42, 0.06);
+  color: var(--text);
+}
+
+body.dark .book-price {
+  background-color: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+}
+
+/* Rating stars */
+.book-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+  color: #facc15;
+}
+
+/* Tag for rating value */
+.book-rating-badge {
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Action row */
+.book-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Tiny “chip” button for delete */
+.book-delete {
+  border-radius: 999px;
+  border: 0;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #fef2f2;
+  background: linear-gradient(135deg, #f97373, #ef4444);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 160ms ease-out,
+    filter 160ms ease-out;
+}
+
+.book-delete:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(239, 68, 68, 0.55);
+  filter: brightness(1.05);
+}
+
+.book-delete:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Subtle “Added” label / index */
+.book-index {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ---------- Utilities ---------- */
+
+/* Visible focus for custom buttons */
+button:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Make grid spacing nicer on small screens */
+@media (max-width: 576px) {
+  .d-flex.flex-wrap.gap-3 {
+    gap: 0.75rem !important;
+  }
+
+  #searchInput {
+    max-width: 100%;
+    width: 100% !important;
+  }
+}

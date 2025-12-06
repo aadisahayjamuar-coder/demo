@@ -1,5 +1,12 @@
 p{
-    color: rgb(9, 9, 9);height:100px;
+    color: rgb(9, 9, 9);
+    font-size: 20px;
+    text-transform: uppercase;
+    border-radius: 8px;/* rounded corners */
+    border: 2px solid black;
+    width: 100px;
+    height:50px
+
 
 }
 
@@ -14,20 +21,32 @@ body{
     background-color: #715656;
     padding:20px;
 }
-.photo-grid{
-    display: grid;
-    float:center;
-    grid-template-columns: repeat(4, 1fr);  
-    gap: 40px;
-    width:90% 
-      
-}
-.photo-grid img {
-  width: 100%;
-  border-radius: 10px;
-}
+
 h1{
     text-align: center;
     size:50px;
     color: brown;
+}
+img{
+    width:200px;
+    height:150px;
+    border-radius: 90px;/* rounded corners */
+    padding: 50px;/* adds space inside the form */
+  
+    
+
+}
+.form-container {
+    background: #3f3364;
+    margin: auto; /* centers the form on the page*/
+    padding: 20px;/* adds space inside the form */
+    border-radius: 8px;/* rounded corners */
+    border: 5px solid black;
+    height: 200px;
+    text-transform: capitalize;
+   max-width:50px
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* spreads 4 items evenly */
+
 }

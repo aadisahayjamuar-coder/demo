@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+
+  <style>
+    /* Gradient background + page layout */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+      background-image: linear-gradient(
+        135deg,
+        #ff3e9d 0%,
+        #0e1f40 50%,
+        #38a2d7 100%
+      ); /* unique blended gradient [web:69][web:72] */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 12px;
+    }
+
+    /* App container */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.6);
+      padding: 24px 22px 28px;
+    }
+
+    /* Header */
+    .app-title {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    .app-subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Input row */
+    .task-input {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .task-input input[type="text"],
+    .task-input input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .task-input input[type="text"] {
+      flex: 1;
+    }
+
+    .task-input input[type="time"] {
+      width: 110px;
+    }
+
+    .task-input input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Add button */
+    #addTaskBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      transition:
+        background 140ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 140ms ease-out;
+    }
+
+    #addTaskBtn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    #addTaskBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Task list */
+    .task-list-wrapper {
+      margin-top: 18px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Single task item */
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-text {
+      font-size: 0.98rem;
+    }
+
+    .task-time {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* Delete button */
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fef2f2;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .app {
+        padding: 18px 14px 22px;
+      }
+
+      .task-input {
+        flex-wrap: wrap;
+      }
+
+      #addTaskBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const taskTextInput = document.getElementById("taskText");
+    const taskTimeInput = document.getElementById("taskTime");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    function formatTime(value) {
+      // value is "HH:MM"
+      if (!value) return "";
+      const [h, m] = value.split(":").map(Number);
+      const period = h >= 12 ? "PM" : "AM";
+      const hour12 = ((h + 11) % 12) + 1;
+      return `${hour12}:${m.toString().padStart(2, "0")} ${period}`;
+    }
+
+    function addTask() {
+      const text = taskTextInput.value.trim();
+      const timeValue = taskTimeInput.value;
+
+      if (!text || !timeValue) {
+        alert("Please enter a task and choose a time.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const main = document.createElement("div");
+      main.className = "task-main";
+
+      const textEl = document.createElement("div");
+      textEl.className = "task-text";
+      textEl.textContent = text;
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "task-time";
+      timeEl.textContent = `At ${formatTime(timeValue)} you will: ${text}`;
+
+      main.appendChild(textEl);
+      main.appendChild(timeEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => li.remove());
+
+      li.appendChild(main);
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+
+      taskTextInput.value = "";
+      taskTimeInput.value = "";
+      taskTextInput.focus();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+
+    taskTextInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    taskTimeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+  </script>
+</body>
+</html>
+vv<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="task10.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">Task Manager</h1>
+      <p class="app-subtitle">
+        Plan what you will do at a specific time today.
+      </p>
+    </header>
+
+    <section class="task-input">
+      <input
+        type="text"
+        id="taskText"
+        placeholder="Add a new task..."
+      />
+      <input
+        type="time"
+        id="taskTime"
+      />
+      <button id="addTaskBtn">Add</button>
+    </section>
+
+    <section class="task-list-wrapper">
+      <ul id="taskList" class="task-list"></ul>
+    </section>
+  </main>
+
+  <script src="task10.js"></script>
+</body>
+</html>

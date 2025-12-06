@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Personalized Greeting</title>
+  <link rel="stylesheet" href="task6.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome! Enter your details:</h2>
+    <form id="greetForm">
+      <label>
+        Name: <input type="text" id="nameInput" required>
+      </label>
+      <label>
+        Mood:
+        <select id="moodInput" required>
+          <option value="default">Choose...</option>
+          <option value="happy">Happy</option>
+          <option value="sad">Sad</option>
+          <option value="excited">Excited</option>
+          <option value="tired">Tired</option>
+        </select>
+      </label>
+      <button type="submit">Greet me!</button>
+    </form>
+    <div id="message" class="message">

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced Book List</title>
+
+  e
+
+  <link rel="stylesheet" href="task7.css">
+</head>
+
+<body class="light">
+
+  <div class="container py-4">
+
+    <h2 class="text-center mb-4">📚 Interactive Bookstore</h2>
+
+    <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
+
+      <input id="searchInput" type="text" class="form-control w-50" placeholder="Search books...">
+
+      <select id="sortSelect" class="form-select w-auto">
+        <option value="">Sort by Price</option>
+        <option value="low-high">Price: Low → High</option>
+        <option value="high-low">Price: High → Low</option>
+      </select>
+
+      <button id="themeToggle" class="btn btn-dark">🌙 Dark Mode</button>
+    </div>
+
+    <div class="card p-3 mb-4 shadow-sm">
+      <h5>Add New Book</h5>
+      <div class="row g-3 mt-1">
+        <div class="col-md-3">
+          <input id="titleInput" class="form-control" placeholder="Book Title">
+        </div>
+        <div class="col-md-3">
+          <input id="authorInput" class="form-control" placeholder="Author Name">
+        </div>
+        <div class="col-md-2">
+          <input id="priceInput" class="form-control" placeholder="Price (₹)">
+        </div>
+        <div class="col-md-2">
+          <input id="ratingInput" class="form-control" placeholder="Rating (1-5)">
+        </div>
+        <div class="col-md-2">
+          <button id="addBtn" class="btn btn-primary w-100">Add Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="bookList" class="row g-4"></div>
+
+  </div>
+
+  <script src="task7.js"></script>
+</body>
+</html>

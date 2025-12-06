@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Weather</title>
+    <link rel="stylesheet" href="task9.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" aria-labelledby="title">
+      <div class="header">
+        <div>
+          <h1 id="title" class="title">Weather</h1>
+          <p class="subtitle">Live data via Open‑Meteo (no API key)</p>
+        </div>
+      </div>
+
+      <form class="search" id="searchForm" autocomplete="off" role="search" aria-label="Search for a city">
+        <label for="q" class="sr-only">City or place</label>
+        <input
+          id="q"
+          name="q"
+          type="text"
+          placeholder="City or place (e.g., Melbourne, London, Delhi)"
+          required
+          inputmode="search"
+        />
+        <button type="submit" id="submitBtn" aria-label="Check weather">Check</button>
+      </form>
+
+      <div class="content" id="content" aria-live="polite">
+        <p class="status">
+          <strong>Tip:</strong> Type a city name and press <em>Check</em> to see temperature, wind, humidity and more.
+        </p>
+      </div>
+    </section>
+  </main>
+  <script src="task9.js"></script>
+</body>
+</html>

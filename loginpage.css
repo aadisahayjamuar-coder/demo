@@ -1,0 +1,31 @@
+.form-container {
+    background: #828585;
+    max-width: 400px;
+    margin: auto; /* centers the form on the page*/
+    padding: 5px;/* adds space inside the form */
+    border-radius: 8px;/* rounded corners */
+    height: 400px;
+    text-transform: capitalize;
+    border: 2px solid #0f0f10;/* light border */
+    border-radius: 30px; 
+}
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f3e8ff;
+    padding:20px;
+}
+h{
+    font-size: 30px;
+}
+button{
+    background-color: rgb(19, 25, 27);
+    color: white;
+    padding: auto;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border 1px solid black;
+}
+
+

@@ -5,39 +5,70 @@ body{
 }
 h2{
     color: rgb(14, 14, 16);
-
+    font-size: 20px;
+text-transform: uppercase;
     
 }   
 h3{
     color: black;
+    font-size: 20px;
+    text-transform: uppercase;
     
 }
 h4{
-    color: black;
+    color: rgb(17, 31, 177);
+    font-size: 20px;
+    text-transform: uppercase;
+}
 label{
     font-size: 18px;
     margin: 10px;
     display: block;
+    font-size: 20px;
 }
 input[type="checkbox"]{
     transform: scale(1.5);
     margin-right: 10px;
+    font-size: 20px;
 }
 button{
     background-color: darkblue;
     color: white;
-    padding: 10px 20px;
+    padding: auto;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
 }
 button:hover{
-    background-color: navy;
+    background-color: rgb(11, 11, 19);
 }
 img{
     border-radius: 10px;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     float:right;
     }
-
+.form-container {
+    background-color: rgb(165, 203, 244);
+    max-width: 1000px;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px #dde3ecc0;
+    border: 1px solid #0d0d0e;
+    height: auto;
+    font-size: 10px;
+    margin :auto;
+    padding: 10px;
+}   
+table{
+    font-size: 18px;
+    border-collapse: collapse;
+    width: 100%
+    
+    
+}
+ table, th, td {
+        border: 2px solid black;   /* gives vertical + horizontal lines */
+        border-collapse: collapse; /* merges borders cleanly */
+        padding: 8px;/* adds space inside cells */
+        text-align: center;
+    }

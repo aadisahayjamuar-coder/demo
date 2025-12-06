@@ -1,0 +1,204 @@
+/* ========= Tokens ========= */
+    :root {
+      --bg: #020617;
+      --bg-soft: #0b1120;
+      --surface: #020617;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.18);
+      --border-subtle: rgba(148, 163, 184, 0.35);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 70px rgba(0, 0, 0, 0.85);
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, #22c55e 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #38bdf8 0, transparent 55%),
+        radial-gradient(circle at 50% 100%, #a855f7 0, transparent 55%),
+        linear-gradient(135deg, #020617, #0b1120); /* soft “nebula” gradient[web:66][web:78] */
+      display: flex;
+      justify-content: center;
+      padding: var(--space-6) var(--space-4);
+      box-sizing: border-box;
+    }
+
+    /* ========= Layout ========= */
+    .page {
+      width: 100%;
+      max-width: 1120px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.85));
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
+      padding: var(--space-5);
+      box-sizing: border-box;
+    }
+
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+      align-items: center;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 2.1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .title-block p {
+      margin: var(--space-2) 0 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+    }
+
+    .controls label {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ========= Inputs ========= */
+    .btn-theme {
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 0.3rem 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .search-input {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      min-width: 200px;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .select-sort {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    /* ========= Cards ========= */
+    .card-grid {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      margin-top: var(--space-4);
+    }
+
+    .card {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(248, 250, 252, 0.1), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.22), transparent 55%),
+        rgba(15, 23, 42, 0.95);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: var(--space-4);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      transition:
+        transform 160ms ease-out,
+        box-shadow 180ms ease-out,
+        border-color 150ms ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 26px 70px rgba(15, 23, 42, 1);
+      border-color: rgba(56, 189, 248, 0.7);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      align-items: flex-start;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .card-badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    .card-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .card-price {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+
+    footer {
+      margin-top: var(--space-5);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    @media (max-width: 640px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      footer {
+        text-align: left;
+      }
+    }

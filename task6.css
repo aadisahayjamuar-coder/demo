@@ -1,0 +1,107 @@
+
+    /* style6.css */
+
+/* Page background */
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(circle at top left, #23a393 0%, #165f56 40%, #0b2a30 100%);
+  color: #f5fdfb;
+}
+
+/* Main card */
+.container {
+  margin: 0 auto;
+  padding: 32px 26px 28px;
+  max-width: 420px;
+  width: 90%;
+  border-radius: 18px;
+  background: rgba(6, 34, 40, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+/* Optional title inside container */
+.container h1,
+.container h2 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+}
+
+/* Optional small text */
+.container p {
+  margin: 0;
+  color: #cdeee5;
+  font-size: 0.95rem;
+}
+
+/* Message box */
+.message {
+  margin-top: 22px;
+  padding: 14px 16px;
+  font-size: 1.1em;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #132e3f, #18425a);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  transform: translateY(6px) scale(0.97);
+  transition:
+    opacity 0.45s cubic-bezier(.68,-0.55,.27,1.55),
+    transform 0.45s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* Visible state for message */
+.message.show {
+  opacity: 1;
+  transform: translateY(0) scale(1.02);
+  animation: pop-in 0.55s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* Pop animation */
+@keyframes pop-in {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.9); }
+  70%  { opacity: 1; transform: translateY(-2px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1.02); }
+}
+
+/* Button */
+button {
+  margin-top: 18px;
+  padding: 11px 26px;
+  font-size: 0.98em;
+  color: #0b2624;
+  background: linear-gradient(135deg, #ffd54a, #ffc926);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    filter 0.2s ease;
+}
+
+/* Hover and active states */
+button:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+  filter: brightness(1.05);
+}
+
+button:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
