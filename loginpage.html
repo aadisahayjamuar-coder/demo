@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=<div.>, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="loginpage.css"
+    <link rel="stylesheet" href="loginpage.css">
 </head>
 <body>
     <center>
@@ -13,25 +13,28 @@
     <br><br/>
     <div class="form-container">
         <br>
-        <label for="user-id">user-id</label>
-        <input type="user-id" id="user-name" name="user-name"required>
+        <label for="user-name">user-id</label>
+        <input type="text" id="user-name" name="user-name"required>
         <button>click</button>
         <br></br>
         <label for="user-password">user-password</label>
-        <input type="user-password" id="user-password"name="user-password">
+        <input type="text" id="user-password"name="user-password">
         <button>click</button>
         <br></br>
-        <button>submit</button>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br> 
-        <br></br>
-        <br></br> 
-        <br></br> 
-        <P>www.loginpage.com</P>  
-
-
+        <button onclick="login()">Login</button>
     </div>
+    <script>
+        function login(){
+            let user = document.getElementById("user-name").value;
+            let pass = document.getElementById("user-password").value;
+
+            if(user === "admin" && pass === "1234"){
+                window.location.href = "index.html";  // Redirect to tasks page
+            } 
+            else{
+                alert("Invalid username or password!");
+            }
+        }
+    </script>
 </body>
 </html>
