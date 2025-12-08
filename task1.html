@@ -3,63 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Bio Data</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #8ec5fc, #e0c3fc);
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h1 {
+            color: #000;
+            text-transform: uppercase;
+            background-color: #c1e3ff;
+        }
+
+        section {
+            background: rgb(158, 137, 137);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        img {
+            width: 150px;
+            height: 180px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #c1e3ff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: black;
+            color: white;
+            margin-top: 20px;
+            border-radius: 12px;
+        }
+
+        .links a {
+            font-size: 18px;
+            margin-right: 20px;
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
 </head>
-<style>
-    body {
-        background-color:rgb(118, 96, 96);
-    }
-             </style>
-                
+
 <body>
-    <center>
-    <h1> MY BIO DATA </h1>
-    </center>
-    <style>
-        h1{color:blue;}
-    </style>
 
-<h2>my picture</h2>
-<img src="hemaang.jpg" alt="hemaang photo" width="100px" height="100px">
     
-    <style>
-        h3{color:blueviolet;}
-    </style>
-    <h3>1."Personal Inforamation"</h3>
-    <p> My name=Hemaang Sahay Jamuar</p>
-    <p>My age=19</p>
-    <p>my phone no=86003999601</p>
-    <p> my gmail=hemaangsahayjamuar@gmail.com</p>
-    <style>
-        h4{color:yellow;}
+    <header>
+        <h1><u><i>My Bio Data</i></u></h1>
+    </header>
 
-    </style>
-    <h4>2."My education Qualification"</h4>
-        <p> 10th Board=CBSE</p>
-        <p> 12th Board=BSEB(Bihar Secondary Education of Education)</p>
-        <style>
-            h5{color:navy}
-        </style>
-        <h5>3."My Hobbies"</h5>
-        <p> (i)playing cricket</p>
-        <p>(ii)playing football</p>
-        <p>(iii)playing vollyball</p>
-        <p>(iv) Listening song</p>
-        <right side>
-            <style>
-                h6{color:darkslategray}
-            </style>
-            <h6>4"My online accounts"</h6>
-            <style>
-            h6{color:black; font-size: 15px;}
-            </style>
-            <a target="_blank" href="1.https://m.facebook.com/">facebook</a>
-            <br/>
-            <a target="_blank" href="2.https://mail.google.com/mail/u/0/#inbox">gmail</a>
-        
+    
+    <section>
+        <h2>My Picture</h2>
+        <figure>
+            <img src="hemaang.jpg" alt="Hemaang Photo">
+            <figcaption><b>Hemaang Sahay Jamuar</b></figcaption>
+        </figure>
+    </section>
 
-            
+    
+    <section>
+        <h2>1. Personal Information</h2>
+        <table>
+            <tr><th>Field</th><th>Details</th></tr>
+            <tr><td>Name</td><td>Hemaang Sahay Jamuar</td></tr>
+            <tr><td>Age</td><td>19</td></tr>
+            <tr><td>Phone No</td><td>86003999601</td></tr>
+            <tr><td>Email</td><td>hemaangsahayjamuar@gmail.com</td></tr>
+        </table>
+    </section>
 
-        
+
+    <section>
+        <h2>2. My Education Qualification</h2>
+        <table>
+            <tr><td>10th Board</td><td>CBSE</td></tr>
+            <tr><td>12th Board</td><td>BSEB (Bihar Secondary Education Board)</td></tr>
+        </table>
+    </section>
+
+    <section>
+        <h2>3. My Hobbies</h2>
+        <ul>
+            <li>Playing Cricket</li>
+            <li>Playing Football</li>
+            <li>Playing Volleyball</li>
+            <li>Listening Songs</li>
+        </ul>
+    </section
+
+    <section>
+        <h2>4. My Online Accounts</h2>
+        <div class="links">
+            <a target="_blank" href="https://m.facebook.com/">Facebook</a>
+            <br>
+            <a target="_blank" href="https://mail.google.com/">Gmail</a>
+        </div>
+    </section>
+    
+
+    <!-- FOOTER -->
+    <footer>
+        © 2025 Hemaang | All Rights Reserved
+    </footer>
+
 </body>
-</html
+</html>
