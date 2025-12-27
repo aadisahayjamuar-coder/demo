@@ -7,7 +7,7 @@ document.getElementById("greetForm").addEventListener("submit", function(e) {
 
   // Time-based greeting
   const hour = new Date().getHours();
-  let timeGreet;
+ timeGreet;
   if (hour < 12) {
     timeGreet = "Good morning";
   } else if (hour < 18) {

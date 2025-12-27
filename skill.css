@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #86d0e1;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.recipe {
+    display: flex;
+    gap: 20px;
+}
+
+.recipe img {
+    width: 400px;
+    border-radius: 8px;
+}
+
+.details {
+    flex: 1;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+ul, ol {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .recipe {
+        flex-direction: column;
+    }
+
+    .recipe img {
+        width: 100%;
+    }
+}

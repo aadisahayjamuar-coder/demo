@@ -1,0 +1,112 @@
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-light: #f8fafc;
+  --text-dark: white;
+  --text-light: #0f172a;
+  --primary: #38bdf8;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 15px;
+  transition: background 0.5s, color 0.5s;
+}
+
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+
+.card {
+  background: var(--bg-card);
+  padding: 18px;
+  border-radius: 12px;
+  max-width: 420px;
+  margin: 15px auto;
+  animation: slideUp 0.6s ease;
+  transition: transform 0.3s;
+}
+
+body.light .card {
+  background: white;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+input, select, textarea, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+button {
+  background: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.03);
+  background: #0ea5e9;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #334155;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  animation: fadeIn 0.5s;
+}
+
+body.light li {
+  background: #e5e7eb;
+}
+
+.hidden {
+  display: none;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.timetable th, .timetable td {
+  border: 1px solid #64748b;
+  padding: 8px;
+}
+
+@keyframes slideUp {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+
+@media(max-width:600px) {
+  .card { width: 100%; }
+}

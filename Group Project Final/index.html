@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FEDF-PS48 Course Scheduler</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button onclick="toggleTheme()" style="position:fixed;top:15px;right:15px;">
+  🌙 / ☀️
+</button>
+<!-- LOGIN -->
+<div id="loginBox" class="card">
+  <h2>🔐 Login</h2>
+  <select id="role">
+    <option value="admin">Admin</option>
+    <option value="student">Student</option>
+  </select>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password">
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminPanel" class="hidden">
+  <h2>👨‍💼 Admin Dashboard</h2>
+
+  <div class="card">
+    <h3>📊 Analytics</h3>
+    <canvas id="chart" width="300" height="150"></canvas>
+  </div>
+
+  <div class="card">
+    <input id="courseName" placeholder="Course Name">
+    <select id="courseDay">
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+    </select>
+    <input id="courseTime" placeholder="Time (e.g. 10-11)">
+    <button onclick="addCourse()">Add Course</button>
+  </div>
+
+  <ul id="courseList"></ul>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<!-- STUDENT DASHBOARD -->
+<div id="studentPanel" class="hidden">
+  <h2>🎓 Student Dashboard</h2>
+
+  <h3>📚 Available Courses</h3>
+  <ul id="studentCourseList"></ul>
+
+  <h3>🗓 Weekly Timetable</h3>
+  <table class="timetable">
+    <tr>
+      <th>Day</th>
+      <th>Courses</th>
+    </tr>
+    <tbody id="timetable"></tbody>
+  </table>
+
+  <h3>💬 Feedback</h3>
+  <textarea id="feedback"></textarea>
+  <button onclick="submitFeedback()">Submit Feedback</button>
+
+  <button onclick="logout()">Logout</button>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>

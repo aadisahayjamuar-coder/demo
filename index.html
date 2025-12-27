@@ -69,14 +69,24 @@
     body{
         background-color: rgb(42, 122, 139);
     }
-</style>
-
-
- 
-
-    
-
-
-    
+   button{
+    background-color: rgb(19, 25, 27);
+    color: white;
+    padding: auto;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border 1px solid black;
+} 
+</style>  
+<br><br/>
+<button onclick="logout()">logout</button> 
+<script>
+    function logout() {
+        alert("You have been logged out!");
+        window.location.href = "loginpage.html";   // change to your login page name
+    }
+</script>
 </body>
 </html>
